@@ -1,0 +1,7 @@
+azure-identity
+azure-functions
+azure-functions-durable
+azure-storage-blob
+openai
+psycopg2-binary
+pandas

@@ -1,0 +1,1 @@
+# Azure Function App for querying PostgresQL database using Open AI natural language to code translation

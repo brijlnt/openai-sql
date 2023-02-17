@@ -1,0 +1,28 @@
+### Sample queries
+# list all product names and ids of products ordered by customers in NY state
+# list of customers who order most number of products in decending order 
+# list all product names and ids of products ordered by customers in New york state.
+# list top selling products by state
+# list top selling products by customer
+# select all products brought by customer Tammie Crylen
+# name of the products sold most in Utah and Newyork
+# number of latest orders for each customers in the decending order
+# select all products brought by digital life solutions, using lower case for comparison
+
+###Durable function invocation(preferred)
+POST {{funcUrl}}/runtime/webhooks/durabletask/orchestrators/fn-drbl-orch-openai-sql?code={{funcKey}} HTTP/1.1
+Content-Type: application/json
+
+{
+  "query": "list all product names and ids of products ordered by customers in NY state"
+}
+
+###Non durable function invocation
+POST {{funcUrl}}/api/fn-openai-sql?code={{funcKey}} HTTP/1.1
+Content-Type: application/json
+
+{
+  "query": "select all products brought by digital life solutions, using lower case for comparison"
+}
+
+
