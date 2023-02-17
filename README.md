@@ -27,6 +27,10 @@ Below resources will be deployed.
 
 _* Suffix is random unique string generated automatically during deployment_
 
+### Update the openai API Key
+1. Sign up for Open AI if you haven't done so already and generate an API key. 
+2. Go to azure portal, locate the function app and update the applicaton settings `OPEN_AI_API_KEY` with the value of the key.
+
 ### Modify PostgresSQL Server network settings
 Go to azure portal, locate postgresSQL server resource and make following changes to network settings.
     
