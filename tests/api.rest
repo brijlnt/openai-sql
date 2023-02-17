@@ -17,6 +17,7 @@ Content-Type: application/json
   "query": "list all product names and ids of products ordered by customers in NY state"
 }
 
+
 ###Non durable function invocation
 POST {{funcUrl}}/api/fn-openai-sql?code={{funcKey}} HTTP/1.1
 Content-Type: application/json
