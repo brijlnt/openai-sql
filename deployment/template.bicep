@@ -16,6 +16,7 @@ param postgresAdminUserPassword string = 'postgrespw@123'
 
 param appInsightsName string = 'az-app-ins-${suffix}'
 param functionAppName string = 'az-func-app-${suffix}'
+param funcAppAppServicePlanName string = 'az-func-app-service-${suffix}'
 param funcAppStorageAccountName string = 'azfnstrg${suffix}'
 param dataStorageAccountName string = 'azdatastrg${suffix}'
 param dataStorageAccountContainerName string = 'data'
@@ -49,7 +50,7 @@ resource postgresServer 'Microsoft.DBforPostgreSQL/flexibleServers@2021-06-01' =
 }
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2021-02-01' = {
-  name: '${functionAppName}Plan'
+  name: funcAppAppServicePlanName
   location: location
   sku: {
     name: 'Y1'
