@@ -10,7 +10,7 @@
 
 Below resources will be deployed.  
 
-1. Azure Function app - `az-func-app-<suffix>` which contains following functions : 
+1. Azure Function app - `az-func-app-<suffix> *` which contains following functions : 
 
     | Function                     | Description                                                                                                   |
     |------------------------------|-------------------------------------------------                                                              |
@@ -20,6 +20,10 @@ Below resources will be deployed.
     | `fn-drbl-act-upload-results-to-blob`     | Azure durable activity function which uploads the results of the query to an Azure storage blob   |
 2. Application insights - `az-app-ins-<suffix>`
 3. Storage account used by the function app for internal purposes- `azfnstrg<suffix>`
-3. App service plan for the function app - `az-func-app-plan-<suffix>`
-4. Postgres SQL flexiserver - `az-postgres-server-7yq7uiiw4bhwi` and database - `retail_org`
-5. Storage account used for storing query output - `azdatastrg7yq7uiiw4bhwi` with container `data`
+4. App service plan for the function app - `az-func-app-plan-<suffix>`
+5. Postgres SQL flexiserver - `az-postgres-server-<suffix>` and database - `retail_org`
+6. Storage account used for storing query output - `azdatastrg<suffix>` with container `data`
+
+_* Suffix is random unique string generated automatically during deployment_
+
+
