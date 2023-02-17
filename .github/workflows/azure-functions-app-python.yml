@@ -2,9 +2,7 @@ name: Deploy app to Azure Function App
 
 on:
   workflow_dispatch:
-    branches:
-    - ["main"]
-
+   
 env:
   # AZURE_FUNCTIONAPP_NAME: 'your-app-name'    
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'        
