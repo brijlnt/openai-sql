@@ -27,12 +27,18 @@ Below resources will be deployed.
 
 _* Suffix is random unique string generated automatically during deployment_
 
+### Update the OpenAI API Key
+
+1. Sign up for OpenAI if you haven't done so already and generate an API key. 
+
+2. Go to azure portal, locate the function app and update the applicaton settings `OPEN_AI_API_KEY` with the value of the key.
+
 ### Modify PostgresSQL Server network settings
 Go to azure portal, locate postgresSQL server resource and make following changes to network settings.
     
-    1. Turn on _Allow public access from any Azure service within Azure to this server_
+1. Turn on _Allow public access from any Azure service within Azure to this server_
 
-    2. Add your client ip addres(optional, if you running following commands from your machine instead of Azure Shell).
+2. Add your client ip addres(optional, if you running following commands from your machine instead of Azure Shell).
 
 ### Create and configure database
 
