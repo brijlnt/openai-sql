@@ -49,15 +49,6 @@ resource postgresServer 'Microsoft.DBforPostgreSQL/flexibleServers@2021-06-01' =
   }
 }
 
-resource appServicePlan 'Microsoft.Web/serverfarms@2021-02-01' = {
-  name: funcAppAppServicePlanName
-  location: location
-  sku: {
-    name: 'Y1'
-    tier: 'Dynamic'
-  }
-}
-
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: appInsightsName
   location: location
@@ -76,6 +67,19 @@ resource funcAppStorageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = 
   }  
 }
 
+resource appServicePlan 'Microsoft.Web/serverfarms@2021-02-01' = {
+  name: funcAppAppServicePlanName
+  location: location
+  kind: 'linux'
+  properties: {
+    reserved: true
+  }
+  sku: {
+    name: 'Y1'
+    tier: 'Dynamic'
+  }
+}
+
 resource functionApp 'Microsoft.Web/sites@2021-02-01' = {
   name: functionAppName
   location: location
@@ -86,6 +90,7 @@ resource functionApp 'Microsoft.Web/sites@2021-02-01' = {
   properties: {
     serverFarmId: appServicePlan.id
     siteConfig: {
+      linuxFxVersion: 'PYTHON|3.8'
       appSettings: [
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
