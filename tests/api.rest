@@ -1,5 +1,6 @@
 ### Sample queries
 # list all product names and ids of products ordered by customers in NY state
+# list all product names, ids, total quanity of products ordered by customers in NY state in desceding order of total quantity
 # list of customers who order most number of products in decending order 
 # list all product names and ids of products ordered by customers in New york state.
 # list top selling products by state
@@ -14,7 +15,7 @@ POST {{funcUrl}}/runtime/webhooks/durabletask/orchestrators/fn-drbl-orch-openai-
 Content-Type: application/json
 
 {
-  "query": "list all product names and ids of products ordered by customers in NY state"
+  "query": "list all product names, ids, total quanity of products ordered by customers in NY state in desceding order of total quantity"
 }
 
 
