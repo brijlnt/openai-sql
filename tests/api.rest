@@ -1,6 +1,7 @@
 ### Sample queries
 # list 10 products
 # list 10 customers
+# most in demand products
 # list all product names and ids of products ordered by customers in NY state
 # list all product names, ids, total quanity of products ordered by customers in NY state in desceding order of total quantity
 # list of customers who order most number of products in decending order 
