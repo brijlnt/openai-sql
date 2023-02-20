@@ -26,15 +26,15 @@ def call_az_func_api(text_query, exec_state):
         response = requests.get(statusUri)
         response.raise_for_status()        
         func_run = response.json()
-        exec_state.text(f'API status: {func_run["runtimeStatus"]}') 
+        exec_state.text(f'Status: {func_run["runtimeStatus"]}') 
         while(func_run['runtimeStatus'] != 'Completed'):
             sleep(3)
             response= requests.get(statusUri)
             response.raise_for_status()
             func_run = response.json()
-            exec_state.text(f'API status: {func_run["runtimeStatus"]}') 
+            exec_state.text(f'Status: {func_run["runtimeStatus"]}') 
             if (func_run['runtimeStatus'] == 'Failed'):
-                exec_state.text(f'API status: {func_run["runtimeStatus"]}') 
+                exec_state.text(f'Status: {func_run["runtimeStatus"]}') 
                 Exception(f'Error : {func_run["output"]}')
         return { 'sqlQuery': func_run['output']['sqlQuery'], 'resultsFileUrl' : func_run['output']['resultsFileUrl'] }
     except HTTPError as http_e:
