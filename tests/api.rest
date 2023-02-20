@@ -8,6 +8,7 @@
 # list all product names and ids of products ordered by customers in New york state.
 # list top selling products by state
 # list top selling products by customer
+# top 10 customers
 # list all orders placed on 3rd august 2019
 # select all products brought by customer Tammie Crylen
 # name of the products sold most in Utah and Newyork
