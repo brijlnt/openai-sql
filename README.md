@@ -60,3 +60,76 @@ Go to azure portal, locate postgresSQL server resource and make following change
 ```sh
     pg_restore -v --no-owner --host=az-postgres-server-<suffix>.postgres.database.azure.com --port=5432 --username=pgadmin123 --dbname=retail_org retail_org.dump
 ```
+
+### Deploy azure function code
+
+1. Create environment variables and secrets required for Github action. 
+
+In the 'Settings -> Secrets and variables-> Actions' of you repo, create an environment variable called `AZURE_FUNCTIONAPP_NAME` and populate the name of the Azure function app. Create new secret `AZURE_FUNCTIONAPP_PUBLISH_PROFILE` under the 'Secrets' tab and copy past the contents of the publish profile of the function app from the Azure portal(overview -> 'Get publish profile').
+
+2. Execute the Github action to deploy the code. 
+
+Go to the 'Actions' tab of the repo and exectue the Git hub action `Deploy code to Azure Function App` to deploy the code. 
+
+## Querying the database
+
+1. Directly through Function API calls. 
+
+You can query the database by directly invoking the orchastrator function `fn-drbl-orch-openai-sql` through azure function runtime interface.
+
+```sh
+curl https://az-func-app-<suffix>.azurewebsites.net/runtime/webhooks/durabletask/orchestrators/fn-drbl-orch-openai-sql?code=<azure function master key>\
+--header "Content-Type: application/json" \
+--data '{ "query": "list top selling products by state" }'
+```
+
+This will trigger the orchastrator function execution and return a response like this :  
+
+```json
+{
+   "id":"f5d1849aae2442d8ad2ed7287ed9f282",
+   "statusQueryGetUri":"https://az-func-app-<suffix>.azurewebsites.net/runtime/webhooks/durabletask/instances/f5d1849aae2442d8ad2ed7287ed9f282?taskHub=azfuncapp<suffix>&connection=Storage&code=QBcKy6A2i2QlmtVsJ2KNAFHg70uZ9_nmKag8kP1ZTkr8AeFuJrUHLg==",
+   "sendEventPostUri":"https://az-func-app-<suffix>.azurewebsites.net/runtime/webhooks/durabletask/instances/f5d1849aae2442d8ad2ed7287ed9f282/raiseEvent/{eventName}?taskHub=azfuncapp<suffix>&connection=Storage&code=QBcKy6A2i2QlmtVsJ2KNAFHg70uZ9_nmKag8kP1ZTkr8AeFuJrUHLg==",
+   "terminatePostUri":"https://az-func-app-<suffix>.azurewebsites.net/runtime/webhooks/durabletask/instances/f5d1849aae2442d8ad2ed7287ed9f282/terminate?reason={text}&taskHub=azfuncapp<suffix>&connection=Storage&code=QBcKy6A2i2QlmtVsJ2KNAFHg70uZ9_nmKag8kP1ZTkr8AeFuJrUHLg==",
+   "purgeHistoryDeleteUri":"https://az-func-app-<suffix>.azurewebsites.net/runtime/webhooks/durabletask/instances/f5d1849aae2442d8ad2ed7287ed9f282?taskHub=azfuncapp<suffix>&connection=Storage&code=QBcKy6A2i2QlmtVsJ2KNAFHg70uZ9_nmKag8kP1ZTkr8AeFuJrUHLg==",
+   "restartPostUri":"https://az-func-app-<suffix>.azurewebsites.net/runtime/webhooks/durabletask/instances/f5d1849aae2442d8ad2ed7287ed9f282/restart?taskHub=azfuncapp<suffix>&connection=Storage&code=QBcKy6A2i2QlmtVsJ2KNAFHg70uZ9_nmKag8kP1ZTkr8AeFuJrUHLg==",
+   "suspendPostUri":"https://az-func-app-<suffix>.azurewebsites.net/runtime/webhooks/durabletask/instances/f5d1849aae2442d8ad2ed7287ed9f282/suspend?reason={text}&taskHub=azfuncapp<suffix>&connection=Storage&code=QBcKy6A2i2QlmtVsJ2KNAFHg70uZ9_nmKag8kP1ZTkr8AeFuJrUHLg==",
+   "resumePostUri":"https://az-func-app-<suffix>.azurewebsites.net/runtime/webhooks/durabletask/instances/f5d1849aae2442d8ad2ed7287ed9f282/resume?reason={text}&taskHub=azfuncapp<suffix>&connection=Storage&code=QBcKy6A2i2QlmtVsJ2KNAFHg70uZ9_nmKag8kP1ZTkr8AeFuJrUHLg=="
+}
+```
+You can use the URL provided in the property `statusQueryGetUri` to track the status of the execution. 
+
+```sh
+curl 'https://az-func-app-<suffix>.azurewebsites.net/runtime/webhooks/durabletask/instances/f5d1849aae2442d8ad2ed7287ed9f282?taskHub=azfuncapp7yq7uiiw4bhwi&connection=Storage&code=QBcKy6A2i2QlmtVsJ2WNAFHg70uZ9_nmKag7kP1ZTkw8AzFuJrUHLg=='
+```
+response will be similar to: 
+
+```
+{
+  "name": "fn-drbl-orch-openai-sql",
+  "instanceId": "f5d1849aae2442d8ad2ed7287ed9f282",
+  "runtimeStatus": "Completed",
+  "input": {
+    "query": "list top selling products by state"
+  },
+  "customStatus": null,
+  "output": {
+    "sqlQuery": "select    state,   product_name,   SUM(quantity) AS total_quantity FROM   sales_orders   INNER JOIN customers ON sales_orders.customer_id = customers.customer_id   INNER JOIN products ON sales_orders.product_id = products.product_id GROUP BY   state,   product_name ORDER BY   state,   total_quantity DESC LIMIT   10;",
+    "resultsFileUrl": "https://azdatastrg<suffix>.blob.core.windows.net/data/file_c5013082-e328-453e-8259-b13ad0ce96cd.csv?st=2023-02-20T08%3A44%3A30Z&se=2023-02-20T09%3A29%3A30Z&sp=r&sv=2021-08-06&sr=b&skoid=d95e5438-908f-47ee-b8f7-70a1a3c93b00&sktid=0b55e01a-573a-4060-b656-d1a3d5815791&skt=2023-02-20T07%3A59%3A30Z&ske=2023-02-20T09%3A59%3A30Z&sks=b&skv=2021-08-06&sig=g/D6cfkd18JDoTBgRtsMgrdhZwCpQ4HNm%2B7aFggLOYY%3D"
+  },
+  "createdTime": "2023-02-20T08:59:15Z",
+  "lastUpdatedTime": "2023-02-20T08:59:31Z"
+}
+```
+
+`runtimeStatus` property will be initially show `Pending`. Once the orchastrator starts running its value will change to `Running` and finally to `Completed`. You can see the SQL corresponding to input text query and the URL of the blob storage file where there results are uploaded. By default the SAS token will be valid for 30 mins. 
+
+2. Using Streamlit app.
+
+You can also use the Streamlit app script `app.py` in the tests folder to execute the queries. Start the scrip by running the command
+
+```sh
+    streamlit run app.py
+```
+
+This will lanch app screen. Type in the query text in the text area and press `Ctrl + Enter` to run the query. Generated SQL query and results will be displayed below after query execution is complete. 
