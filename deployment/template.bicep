@@ -117,23 +117,23 @@ resource functionApp 'Microsoft.Web/sites@2021-02-01' = {
           value: openaiApiKey
         }
         {
-          name: 'POSTGRES_SQL_DB_NAME'
+          name: 'POSTGRE_SQL_DB_NAME'
           value: postgresDbName
         }
         {
-          name: 'POSTGRES_SQL_PORT'
+          name: 'POSTGRE_SQL_PORT'
           value: postgresPort
         }
         {
-          name: 'POSTGRES_SQL_USER'
+          name: 'POSTGRE_SQL_USER'
           value: postgresAdminUser
         }
         {
-          name: 'POSTGRES_SQL_PWD'
+          name: 'POSTGRE_SQL_PWD'
           value: postgresAdminUserPassword
         }
         {
-          name: 'POSTGRES_SQL_SERVER'
+          name: 'POSTGRE_SQL_SERVER'
           value: postgresServer.properties.fullyQualifiedDomainName
         }        
         {
