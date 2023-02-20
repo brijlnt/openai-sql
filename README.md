@@ -1,5 +1,23 @@
 # Azure Function App for querying PostgresQL database using Open AI natural language to code translation
 
+## Design
+
+### API app
+Design of the App shown in fig 1. At the core, there is an Azure durable orchastrator function which runs as set of activity functions using [function chaining pattern](https://learn.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-overview?tabs=csharp-inproc#chaining) to translate the natural language query to SQL using OpenAI Codex model and execute it on Postgres SQL database tables and upload the results to Azure Blob Storage. It then returns the generated SQL and a SAS url to the output file to the caller. 
+
+![Figure 1](https://github.com/bablulawrence/openai-sql/raw/main/docs/Openai_SQL.png)
+
+### Database
+
+The application uses a sample database consisting of following tables. Data in products, customer and sales_orders tables are based on the Databricks retail_org datasets. 
+
+| Table          | Details                                                                                            |
+|----------------|--------------------------------------------------------------------------------------------------------------------------|
+| `Products`     | Product details - product_id, product_name, product_category, sales_price ....                                           |     
+| `Customers`    | Customer details - customer_id, customer_name, state, city, postcode  ...                                                |     
+| `Sales_orders` | Sales order details - order_line_item_no, order_number, order_datetime, customer_id, product_id, unit_price, quantity    |
+| `Prompt`       | Prompt - A table which contains details such as table schema, data descriptions etc. used for creating OpenAI API prompt |
+
 ## Deployment
 
 ### Deploy azure resources
@@ -15,6 +33,7 @@ Below resources will be deployed.
 
 | Function                     | Description                                                                                                   |
 |------------------------------|-------------------------------------------------                                                              |
+| `fn-drbl-starter`            | Azure durable starter function with http trigger                                                              |     
 | `fn-drbl-orch-openai-sql`    | Azure durable orchastrator function                                                                           |     
 | `fn-drbl-generate-sql-query` | Azure durable activity function which generate SQL equivalent for the natural language query using OpenAI API |
 | `fn-drbl-execute-sql-query`  | Azure durable activity function which executes SQL query on PostgresSQL database                              |
@@ -126,10 +145,12 @@ response will be similar to:
 
 2. Using Streamlit app.
 
-You can also use the Streamlit app script `app.py` in the tests folder to execute the queries. Start the scrip by running the command
+You can also use the Streamlit app script `app.py` in the tests folder to execute the queries. Start the scrip by running the command :
 
 ```sh
     streamlit run app.py
 ```
 
-This will lanch app screen. Type in the query text in the text area and press `Ctrl + Enter` to run the query. Generated SQL query and results will be displayed below after query execution is complete. 
+This will lanch app screen. Type in the query text in the text area and press `Ctrl + Enter` to run the query. Generated SQL query and results will be displayed below after query execution is complete (Figure 2). 
+
+![Figure 2](https://github.com/bablulawrence/openai-sql/raw/main/docs/streamlit_run.png)
