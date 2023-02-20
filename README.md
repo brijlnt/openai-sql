@@ -124,4 +124,12 @@ response will be similar to:
 
 `runtimeStatus` property will be initially show `Pending`. Once the orchastrator starts running its value will change to `Running` and finally to `Completed`. You can see the SQL corresponding to input text query and the URL of the blob storage file where there results are uploaded. By default the SAS token will be valid for 30 mins. 
 
-2. Using Streamlit app
+2. Using Streamlit app.
+
+You can also use the Streamlit app script `app.py` in the tests folder to execute the queries. Start the scrip by running the command
+
+```sh
+    streamlit run app.py
+```
+
+This will lanch app screen. Type in the query text in the text area and press `Ctrl + Enter` to run the query. Generated SQL query and results will be displayed below after query execution is complete. 
