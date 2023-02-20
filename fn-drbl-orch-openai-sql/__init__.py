@@ -7,11 +7,11 @@ def orchestrator_function(context: df.DurableOrchestrationContext):
     logging.info("Starting execution of orchastrator function")
 
     #Get environment variables
-    host = os.environ["POSTGRES_SQL_SERVER"]
-    port = os.environ["POSTGRES_SQL_PORT"]
-    database = os.environ["POSTGRES_SQL_DB_NAME"]
-    user = os.environ['POSTGRES_SQL_USER']
-    password = os.environ['POSTGRES_SQL_PWD']
+    host = os.environ["POSTGRE_SQL_SERVER"]
+    port = os.environ["POSTGRE_SQL_PORT"]
+    database = os.environ["POSTGRE_SQL_DB_NAME"]
+    user = os.environ['POSTGRE_SQL_USER']
+    password = os.environ['POSTGRE_SQL_PWD']
     storage_account_name = os.environ["STORAGE_ACCOUNT_NAME"]
     container_name = os.environ["STORAGE_CONTAINER_NAME"]
     openai.api_key = os.environ["OPENAI_API_KEY"]
