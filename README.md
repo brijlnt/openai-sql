@@ -5,7 +5,7 @@
 ### API app
 Design of the App shown in fig 1. At the core, there is an Azure durable orchastrator function which runs as set of activity functions using [function chaining pattern](https://learn.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-overview?tabs=csharp-inproc#chaining) to translate the natural language query to SQL using OpenAI Codex model and execute it on Postgres SQL database tables and upload the results to Azure Blob Storage. It then returns the generated SQL and a SAS url to the output file to the caller. 
 
-![Figure 1](https://github.com/bablulawrence/openai-sql/raw/main/docs/Openai_SQL.png)
+![Figure 1](https://github.com/bablulawrence/openai-sql/raw/main/docs/openai_sql.svg)
 
 ### Database
 
