@@ -13,16 +13,22 @@
 # select all products brought by customer Tammie Crylen
 # name of the products sold most in Utah and Newyork
 # number of latest orders for each customers in the decending order
-# select all products brought by digital life solutions, using lower case for comparison
+# list products brought by 'digital lifestyle solutions', using lower case for comparison
 # who are my most valuable( top 3) customers
 # list most products sold in New york and Utah
+# list most products sold in Utah, include state code in the output
+# list products brought by 'John M Wozniak'
+# list products brought by 'Henry M Boylan'
+# list products brought by 'Patrick J Hassett'
+HASSETT,  PATRICK J
+'Patrick J Hassett'
 
 ###Durable function invocation(preferred)
 POST {{funcUrl}}/api/orchestrators/fn-drbl-orch-openai-sql?code={{funcKey}} HTTP/1.1
 Content-Type: application/json
 
 {
-  "query": "list 10 products"   
+  "query": "list most products sold in New york and Utah"   
 }
 
 ###Non durable function invocation
