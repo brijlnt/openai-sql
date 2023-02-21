@@ -22,9 +22,8 @@ POST {{funcUrl}}/api/orchestrators/fn-drbl-orch-openai-sql?code={{funcKey}} HTTP
 Content-Type: application/json
 
 {
-  "query": "list most products sold in New york and Utah"   
+  "query": "list 10 products"   
 }
-
 
 ###Non durable function invocation
 POST {{funcUrl}}/api/fn-openai-sql?code={{funcKey}} HTTP/1.1
