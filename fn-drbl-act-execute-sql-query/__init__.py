@@ -3,7 +3,6 @@ import pandas as pd
 import psycopg2
 
 def execute_sql_query(host, port, database, user, password, sql_query): 
-    logging.warning(sql_query)
     with psycopg2.connect(host=host, 
                         port=port, 
                         database=database, 

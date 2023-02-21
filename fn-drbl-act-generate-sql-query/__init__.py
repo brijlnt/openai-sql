@@ -25,6 +25,7 @@ def generate_openai_prompt(host, port, database, user, password, text_query):
     return get_prompt_text(prompt_lines, text_query)
 
 def prompt_openai(prompt):
+    logging.info(prompt)
     return openai.Completion.create(
         model="code-davinci-002",
         prompt=prompt,
