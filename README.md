@@ -3,7 +3,7 @@
 ## Design
 
 ### API app
-Design of the App shown in Figure 1. At the core, there is an Azure durable orchastrator function which runs as set of activity functions using [function chaining pattern](https://learn.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-overview?tabs=csharp-inproc#chaining) to translate the natural language query to SQL using OpenAI Codex model and execute it on Postgres SQL database tables and upload the results to Azure Blob Storage. It then returns the generated SQL and a SAS url to the output file to the caller. 
+Design of the App shown in Figure 1. At the core, there is an Azure durable orchestrator function which runs as set of activity functions using [function chaining pattern](https://learn.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-overview?tabs=csharp-inproc#chaining) to translate the natural language query to SQL using OpenAI Codex model and execute it on Postgres SQL database tables and upload the results to Azure Blob Storage. It then returns the generated SQL and a SAS url to the output file to the caller. 
 
 ![Figure 1](https://github.com/bablulawrence/openai-sql/raw/main/docs/openai_sql.svg)
 
@@ -145,7 +145,9 @@ response will be similar to:
 
 2. Using Streamlit app.
 
-You can also use the Streamlit app script `app.py` in the tests folder to execute the queries. Start the scrip by running the command :
+You can also use the Streamlit app script `app.py` in the /tests folder to execute the queries. To do this create two environemnt variables `AZURE_FUNCTION_APP_URL` and `AZURE_FUNCTION_APP_KEY` and populate the values of the function app URL and key. Alternatively you can update thise values directly in the script.
+
+Start the script by running the command :
 
 ```sh
     streamlit run app.py

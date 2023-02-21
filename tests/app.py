@@ -35,7 +35,7 @@ def call_az_func_api(text_query, exec_state):
             func_run = response.json()
             exec_state.text(f'Status: {func_run["runtimeStatus"]}') 
             if (func_run['runtimeStatus'] == 'Failed'):
-                exec_state.text(f'Status: {func_run["runtimeStatus"]}') 
+                exec_state.text(f'Status: {func_run["runtimeStatus"]}, Error:{func_run["output"]}') 
                 Exception(f'Error : {func_run["output"]}')
         return { 'sqlQuery': func_run['output']['sqlQuery'], 'resultsFileUrl' : func_run['output']['resultsFileUrl'] }
     except HTTPError as http_e:

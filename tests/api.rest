@@ -14,15 +14,16 @@
 # name of the products sold most in Utah and Newyork
 # number of latest orders for each customers in the decending order
 # select all products brought by digital life solutions, using lower case for comparison
+# who are my most valuable( top 3) customers
+# list most products sold in New york and Utah
 
 ###Durable function invocation(preferred)
 POST {{funcUrl}}/api/orchestrators/fn-drbl-orch-openai-sql?code={{funcKey}} HTTP/1.1
 Content-Type: application/json
 
 {
-  "query": "list all product names, ids, total quanity of products ordered by customers in NY state in desceding order of total quantity"   
+  "query": "list 10 products"   
 }
-
 
 ###Non durable function invocation
 POST {{funcUrl}}/api/fn-openai-sql?code={{funcKey}} HTTP/1.1
