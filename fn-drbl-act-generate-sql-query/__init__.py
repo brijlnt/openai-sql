@@ -8,7 +8,7 @@ def get_prompt_text(prompt_lines, text_query):
     for pl in prompt_lines:
         schema_text+= f'# {pl}\\n'
     return ( '### Postgres SQL tables, with their properties:\\n#\\n' + schema_text + 
-            '#\\n### A query to' + text_query +'\\nSELECT' )
+            '#\\n### A query to ' + text_query +'\\nSELECT' )
 
 def generate_openai_prompt(host, port, database, user, password, text_query):
     sql_query = "Select line from config.prompt where include is true;"
