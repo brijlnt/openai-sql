@@ -1,9 +1,9 @@
-# Azure Function App for querying PostgresQL database using Open AI natural language to code translation
+# Azure Function App for querying PostgresQL database using Open AI natural language to SQL translation
 
 ## Design
 
 ### API app
-Design of the App shown in Figure 1. At the core, there is an Azure durable orchestrator function which runs as set of activity functions using [function chaining pattern](https://learn.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-overview?tabs=csharp-inproc#chaining) to translate the natural language query to SQL using OpenAI Codex model and execute it on Postgres SQL database tables and upload the results to Azure Blob Storage. It then returns the generated SQL and a SAS url to the output file to the caller. 
+Design of the App shown in Figure 1. At the core, there is an Azure durable orchestrator function which runs as set of activity functions using [function chaining pattern](https://learn.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-overview?tabs=csharp-inproc#chaining) to translate the natural language query to SQL using OpenAI Codex model and execute it on Postgres SQL database tables and upload the results to Azure Blob Storage. It then returns the generated SQL and a SAS URL of the output file to the caller. 
 
 ![Figure 1](https://github.com/bablulawrence/openai-sql/raw/main/docs/openai_sql.svg)
 
@@ -13,31 +13,31 @@ The application uses a sample database consisting of following tables. Data in p
 
 | Table          | Details                                                                                            |
 |----------------|--------------------------------------------------------------------------------------------------------------------------|
-| `Products`     | Product details - product_id, product_name, product_category, sales_price ....                                           |     
-| `Customers`    | Customer details - customer_id, customer_name, state, city, postcode  ...                                                |     
+| `Products`     | Product details - product_id, product_name, product_category, sales_price etc.                                           |     
+| `Customers`    | Customer details - customer_id, customer_name, street, state, city, postcode  etc.                                       |     
 | `Sales_orders` | Sales order details - order_line_item_no, order_number, order_datetime, customer_id, product_id, unit_price, quantity    |
 | `Prompt`       | Prompt - A table which contains details such as table schema, data descriptions etc. used for creating OpenAI API prompt |
 
 ## Deployment
 
 ### Deploy azure resources
-Clone this repo. Deploy the Azure resources by executing the bicep template `template.bicep` in the folder `/deployment`
+Deploy the Azure resources by running the bicep template `template.bicep` in the folder `/deployment`
 
 ```sh
     az deployment group create --name deployopenaisql --resource-group rg-openai-sql --template-file template.bicep
 ```
 
-Below resources will be deployed.  
+Following resources will be deployed.  
 
 1. Azure Function app - `az-func-app-<suffix> *` which contains following functions : 
 
-| Function                     | Description                                                                                                   |
-|------------------------------|-------------------------------------------------                                                              |
-| `fn-drbl-starter`            | Azure durable starter function with http trigger                                                              |     
-| `fn-drbl-orch-openai-sql`    | Azure durable orchastrator function                                                                           |     
-| `fn-drbl-generate-sql-query` | Azure durable activity function which generate SQL equivalent for the natural language query using OpenAI API |
-| `fn-drbl-execute-sql-query`  | Azure durable activity function which executes SQL query on PostgresSQL database                              |
-| `fn-drbl-act-upload-results-to-blob`     | Azure durable activity function which uploads the results of the query to an Azure storage blob   |
+| Function                     | Description                                                                                                       |
+|------------------------------|-------------------------------------------------                                                                  |
+| `fn-drbl-starter`            | Azure durable starter function with http trigger                                                                  |     
+| `fn-drbl-orch-openai-sql`    | Azure durable orchastrator function                                                                               |     
+| `fn-drbl-act-generate-sql-query` | Azure durable activity function which generate SQL equivalent for the natural language query using OpenAI API |
+| `fn-drbl-act-execute-sql-query`  | Azure durable activity function which executes SQL query on PostgreSQL database                              |
+| `fn-drbl-act-upload-results-to-blob`     | Azure durable activity function which uploads the results of the query to an Azure storage blob       |
 2. Application insights - `az-app-ins-<suffix>`
 3. Storage account used by the function app for internal purposes- `azfnstrg<suffix>`
 4. App service plan for the function app - `az-func-app-plan-<suffix>`
@@ -50,10 +50,10 @@ _* Suffix is random unique string generated automatically during deployment_
 
 1. Sign up for OpenAI if you haven't done so already and generate an API key. 
 
-2. Go to azure portal, locate the function app and update the applicaton settings `OPEN_AI_API_KEY` with the value of the key.
+2. Go to azure portal, locate the function app and update the applicaton settings - `OPEN_AI_API_KEY` with the value of the key.
 
-### Modify PostgresSQL Server network settings
-Go to azure portal, locate postgresSQL server resource and make following changes to network settings.
+### Modify PostgreSQL Server network settings
+Go to azure portal, locate PostgreSQL server resource and make following changes to network settings.
     
 1. Turn on _Allow public access from any Azure service within Azure to this server_
 
@@ -70,7 +70,7 @@ Go to azure portal, locate postgresSQL server resource and make following change
 2. Connect to the PostgreSQL server and create `retail_org` database.
 
 ```sh
-     az postgres flexible-server connect -n az-postgres-server-<suffix> -u pgadmin123 -p <password> -d postgres --interactive
+     az postgres flexible-server connect -n az-postgres-server-<suffix> -u pgadmin123 -d postgres --interactive
 ```
 ```SQL
     CREATE DATABASE retail_org;
@@ -81,16 +81,19 @@ Go to azure portal, locate postgresSQL server resource and make following change
 ```
 
 ### Deploy azure function code
+Github action is used for deploying the function code to Azure Function app. 
 
-1. Create environment variables and secrets required for Github action. 
+1. Fork this repo. 
 
-In the 'Settings -> Secrets and variables-> Actions' of you repo, create an environment variable called `AZURE_FUNCTIONAPP_NAME` and populate the name of the Azure function app. Create new secret `AZURE_FUNCTIONAPP_PUBLISH_PROFILE` under the 'Secrets' tab and copy past the contents of the publish profile of the function app from the Azure portal(overview -> 'Get publish profile').
+2. Create environment variables and secrets required for Github action in the copy. 
 
-2. Execute the Github action to deploy the code. 
+Go to 'Actions' tab and enable workflows. In the 'Settings -> Secrets and variables-> Actions' of the repo, create an environment variable called `AZURE_FUNCTIONAPP_NAME` and populate the name of the Azure function app. Create new secret `AZURE_FUNCTIONAPP_PUBLISH_PROFILE` under the 'Secrets' section and copy past the contents of the publish profile of the function app from the Azure portal(overview -> 'Get publish profile').
+
+3. Execute the Github action to deploy the code. 
 
 Go to the 'Actions' tab of the repo and exectue the Git hub action `Deploy code to Azure Function App` to deploy the code. 
 
-## Querying the database
+## Executing the natural language(English) queries
 
 1. Directly through Function API calls. 
 
@@ -145,7 +148,7 @@ response will be similar to:
 
 2. Using Streamlit app.
 
-You can also use the Streamlit app script `app.py` in the /tests folder to execute the queries. To do this create two environemnt variables `AZURE_FUNCTION_APP_URL` and `AZURE_FUNCTION_APP_KEY` and populate the values of the function app URL and key. Alternatively you can update thise values directly in the script.
+You can also use the Streamlit app script `app.py` in the `/tests` folder to execute the queries. To do this create two environemnt variables `AZURE_FUNCTION_APP_URL` and `AZURE_FUNCTION_APP_KEY` and populate the values of the function app URL and key. Alternatively you can update thise values directly in the script.
 
 Start the script by running the command :
 
@@ -156,3 +159,9 @@ Start the script by running the command :
 This will lanch app screen. Type in the query text in the text area and press `Ctrl + Enter` to run the query. Generated SQL query and results will be displayed below after query execution is complete (Figure 2). 
 
 ![Figure 2](https://github.com/bablulawrence/openai-sql/raw/main/docs/streamlit_run.png)
+
+## Sample query results
+
+![High value customers](https://github.com/bablulawrence/openai-sql/raw/main/docs/sample_high_value_customers.png)
+![State code](https://github.com/bablulawrence/openai-sql/raw/main/docs/sample_state_code.png)
+![Date and time](https://github.com/bablulawrence/openai-sql/raw/main/docs/sample_data_and_time.png)
