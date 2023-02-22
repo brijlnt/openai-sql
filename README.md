@@ -163,5 +163,9 @@ This will lanch app screen. Type in the query text in the text area and press `C
 ## Sample query results
 
 ![High value customers](https://github.com/bablulawrence/openai-sql/raw/main/docs/sample_high_value_customers.png)
+------------------
+
 ![State code](https://github.com/bablulawrence/openai-sql/raw/main/docs/sample_state_code.png)
+-------------------
+
 ![Date and time](https://github.com/bablulawrence/openai-sql/raw/main/docs/sample_data_and_time.png)
