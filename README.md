@@ -1,4 +1,4 @@
-# Azure Function App for querying PostgresQL database using Open AI natural language to SQL translation
+# An App for querying PostgresQL database using Open AI natural language to SQL translation and Azure Functions
 
 ## Design
 
