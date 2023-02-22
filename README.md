@@ -36,8 +36,10 @@ Following resources will be deployed.
 | `fn-drbl-starter`            | Azure durable starter function with http trigger                                                                  |     
 | `fn-drbl-orch-openai-sql`    | Azure durable orchastrator function                                                                               |     
 | `fn-drbl-act-generate-sql-query` | Azure durable activity function which generate SQL equivalent for the natural language query using OpenAI API |
-| `fn-drbl-act-execute-sql-query`  | Azure durable activity function which executes SQL query on PostgreSQL database                              |
+| `fn-drbl-act-execute-sql-query`  | Azure durable activity function which executes SQL query on PostgreSQL database                               |
 | `fn-drbl-act-upload-results-to-blob`     | Azure durable activity function which uploads the results of the query to an Azure storage blob       |
+| `fn-openai-sql`     | A regular(non-durable) Azure Function with http trigger which does everthing - prompt generation through result file upload, good fit for interactive use cases       |
+
 2. Application insights - `az-app-ins-<suffix>`
 3. Storage account used by the function app for internal purposes- `azfnstrg<suffix>`
 4. App service plan for the function app - `az-func-app-plan-<suffix>`
