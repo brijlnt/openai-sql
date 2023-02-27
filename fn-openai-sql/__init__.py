@@ -8,7 +8,8 @@ import logging
 import json
 import pandas as pd
 import uuid
-# import pyodbc
+# import 
+#why this code
 import psycopg2
 from datetime import datetime, timedelta
 from azure.storage.blob import BlobServiceClient, generate_blob_sas, BlobSasPermissions
