@@ -2,6 +2,11 @@ import openai
 import logging
 import pandas as pd
 import psycopg2
+#added below nltk imports 
+from stop_words import get_stop_words
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
 
 def get_prompt_text(prompt_lines, text_query):
     schema_text=''
