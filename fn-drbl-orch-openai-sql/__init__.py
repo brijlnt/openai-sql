@@ -18,6 +18,7 @@ def orchestrator_function(context: df.DurableOrchestrationContext):
     openai.api_base = os.environ["AZURE_OPENAI_ENDPOINT"]
     openai.api_type = os.environ['API_TYPE']
     openai.api_version = os.environ['API_VERSION']
+    deployment_name = os.environ['DEPLOYMENT_NAME']
 
     # Get query text from input
     params = context.get_input()    
