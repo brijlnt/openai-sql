@@ -15,16 +15,32 @@ def get_prompt_text(prompt_lines, text_query):
     return ( '### Postgres SQL tables, with their properties:\\n#\\n' + schema_text + 
             '#\\n### A query to ' + text_query +'\\nSELECT' )
 
-def get_probabale_tablelist(text_query):
-    stop_words = list(get_stop_words('en'))         #About 900 stopwords
-    nltk_words = list(stopwords.words('english')) #About 150 stopwords
-    stop_words.extend(nltk_words)
+#def get_probabale_tablelist(text_query):
+#    stop_words = list(get_stop_words('en'))         #About 900 stopwords
+#    nltk_words = list(stopwords.words('english')) #About 150 stopwords
+#    stop_words.extend(nltk_words)
     #  word_list =  "show all sales_orders of customers"
-    tokens = word_tokenize(text_query)
-    req_table_list = [w for w in tokens if not w in stop_words]
-    return req_table_list
+#    tokens = word_tokenize(text_query)
+#    req_table_list = [w for w in tokens if not w in stop_words]
+#    return req_table_list
 
-def generate_prompt_list(data, probabale_tablelist)
+def get_probabale_tablelist(text_query):
+    req_table_list = [w for w in tokens if not w in stop_words]
+    prompt = (f"Please correct spelling and list only keywords from below text:\n"
+              f"{text_query}\n")
+    logging.info(prompt)
+    return openai.Completion.create(
+        engine='LTIM_Keyword',        
+        prompt=prompt,
+        temperature=0,
+        max_tokens=150,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0,
+        stop=["#", ";"]
+    )
+
+def generate_prompt_list(data, probabale_tablelist):
     table_list = data["table_name"]
     join_table_list = data["join_table"]
     final_list = []
