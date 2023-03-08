@@ -25,7 +25,6 @@ def get_prompt_text(prompt_lines, text_query):
 #    return req_table_list
 
 def get_probabale_tablelist(text_query):
-    req_table_list = [w for w in tokens if not w in stop_words]
     prompt = (f"Please correct spelling and list only keywords from below text:\n"
               f"{text_query}\n")
     logging.info(prompt)
