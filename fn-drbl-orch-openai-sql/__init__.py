@@ -15,6 +15,9 @@ def orchestrator_function(context: df.DurableOrchestrationContext):
     storage_account_name = os.environ["STORAGE_ACCOUNT_NAME"]
     container_name = os.environ["STORAGE_CONTAINER_NAME"]
     openai.api_key = os.environ["OPENAI_API_KEY"]
+    openai.api_base = os.environ["AZURE_OPENAI_ENDPOINT"]
+    openai.api_type = os.environ['API_TYPE']
+    openai.api_version = os.environ['API_VERSION']
 
     # Get query text from input
     params = context.get_input()    
