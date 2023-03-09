@@ -69,6 +69,7 @@ def generate_openai_prompt(host, port, database, user, password, text_query):
         with conn.cursor() as cursor:
                 cursor.execute(sql_query)
                 df = pd.DataFrame(cursor.fetchall())
+                df.columns = ['id','line','include','join_table','table_name']
                 prompt_lines = generate_prompt_list(df, probabale_tablelist)
       #          df['line'].values.tolist()
     return get_prompt_text(prompt_lines, text_query)
