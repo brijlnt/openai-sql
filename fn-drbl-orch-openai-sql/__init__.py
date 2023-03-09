@@ -7,6 +7,7 @@ def orchestrator_function(context: df.DurableOrchestrationContext):
     logging.info("Starting execution of orchastrator function")
 
     #Get environment variables
+    
     host = os.environ["POSTGRE_SQL_SERVER"]
     port = os.environ["POSTGRE_SQL_PORT"]
     database = os.environ["POSTGRE_SQL_DB_NAME"]
@@ -15,6 +16,12 @@ def orchestrator_function(context: df.DurableOrchestrationContext):
     storage_account_name = os.environ["STORAGE_ACCOUNT_NAME"]
     container_name = os.environ["STORAGE_CONTAINER_NAME"]
     openai.api_key = os.environ["OPENAI_API_KEY"]
+    openai.api_base = os.environ["AZURE_OPENAI_ENDPOINT"]
+    openai.api_type = os.environ['API_TYPE']
+    openai.api_version = os.environ['API_VERSION']
+    deployment_name = os.environ['DEPLOYMENT_NAME']
+    deployment_name_keyword = os.environ['DEPLOYMENT_NAME_KEYWORD']
+    
 
     # Get query text from input
     params = context.get_input()    
