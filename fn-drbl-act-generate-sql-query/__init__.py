@@ -73,7 +73,7 @@ def generate_openai_prompt(host, port, database, user, password, text_query):
 def prompt_openai(prompt):
     logging.info(prompt)
     return openai.Completion.create(
-        model="code-davinci-002",
+        engine="LTIM",
         prompt=prompt,
         temperature=0,
         max_tokens=150,
