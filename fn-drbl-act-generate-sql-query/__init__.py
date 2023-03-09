@@ -25,7 +25,7 @@ def get_prompt_text(prompt_lines, text_query):
 #    return req_table_list
 
 def get_probabale_tablelist(text_query):
-    prompt = (f"Please correct spelling and list only keywords from below text:\n"
+    prompt = (f"Please correct spelling and remove stopwords and list only keywords from below text in lowercase:\n"
               f"{text_query}\n")
     logging.info(prompt)
     return openai.Completion.create(
@@ -39,13 +39,16 @@ def get_probabale_tablelist(text_query):
         stop=["#", ";"]
     )
 
-def generate_prompt_list(data, probabale_tablelist):
+def generate_prompt_list(data, p_tablelist):
     table_list = data["table_name"]
     join_table_list = data["join_table"]
     final_list = []
+    probabale_tablelist = p_tablelist["choices"][0]["text"]
+    probabale_tablelist = probabale_tablelist.strip()
+    probabale_tablelist = probabale_tablelist.split(sep=",")
     for table_name,join_table in zip(table_list,join_table_list):
-        for j in range(len(req_table_list)):
-            if table_name == req_table_list[j]:   #This logic can be changed to cater to spelling mistakes
+        for j in range(len(probabale_tablelist)):
+            if table_name == probabale_tablelist[j]:   #This logic can be changed to cater to spelling mistakes
                 final_list.append(table_name)       
                 if join_table ==join_table:
                     for kv in join_table.split(","):
