@@ -52,7 +52,7 @@ def generate_prompt_list(data, p_tablelist):
         for j in range(len(probabale_tablelist)):
             if lev(table_name , probabale_tablelist[j]) < 3  :   #This logic can be changed to cater to spelling mistakes
                 final_list.append(table_name)       
-                if join_table ==join_table:
+                if join_table is not None:
                     for kv in join_table.split(","):
                         final_list.append(kv)
     list_for_prompt = set(final_list)
