@@ -2,6 +2,8 @@ import openai
 import logging
 import pandas as pd
 import psycopg2
+import Levenshtein
+from Levenshtein import distance as lev
 #added below nltk imports 
 #from stop_words import get_stop_words
 #from nltk.corpus import stopwords
@@ -48,7 +50,7 @@ def generate_prompt_list(data, p_tablelist):
     probabale_tablelist = probabale_tablelist.split(sep=",")
     for table_name,join_table in zip(table_list,join_table_list):
         for j in range(len(probabale_tablelist)):
-            if table_name == probabale_tablelist[j]:   #This logic can be changed to cater to spelling mistakes
+            if lev(table_name , probabale_tablelist[j]) < 3  :   #This logic can be changed to cater to spelling mistakes
                 final_list.append(table_name)       
                 if join_table ==join_table:
                     for kv in join_table.split(","):
