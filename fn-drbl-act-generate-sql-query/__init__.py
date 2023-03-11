@@ -2,6 +2,8 @@ import openai
 import logging
 import pandas as pd
 import psycopg2
+import Levenshtein
+from Levenshtein import distance as lev
 
 
 def get_prompt_text(prompt_lines, text_query):
@@ -37,7 +39,7 @@ def generate_prompt_list(data, p_tablelist):
         for j in range(len(probabale_tablelist)):
             if table_name == probabale_tablelist[j]:   #This logic can be changed to cater to spelling mistakes
                 final_list.append(table_name)       
-                if join_table ==join_table:
+                if join_table is not None:
                     for kv in join_table.split(","):
                         final_list.append(kv)
     list_for_prompt = set(final_list)
