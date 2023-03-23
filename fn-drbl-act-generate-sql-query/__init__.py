@@ -105,6 +105,9 @@ import pandas as pd
 import psycopg2
 from azure.storage.blob import BlobServiceClient, generate_blob_sas, BlobSasPermissions
 from llama_index import SimpleDirectoryReader, GPTListIndex, GPTSimpleVectorIndex, LLMPredictor, PromptHelper
+import os
+
+os.environ["OPENAI_API_KEY"] = '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'
 
 
 # def get_prompt_text(prompt_lines, text_query):
@@ -132,18 +135,17 @@ def generate_openai_prompt(text_query):
     
     storage_account_name = 'azdatastrgl2zbtzoyzxtm6'
     container_name = 'vector'
-    file_name = 'index.json'
   
     blob_service_client = BlobServiceClient(
     account_url=f"https://{storage_account_name}.blob.core.windows.net",
                  credential='0LWc9BUPnXAuZVunZWjgY0rBoF4PPPNmWzPs5C+Yg6alKLSNegBX7XWLjsL0wKDGpcTy+7YavjMy+AStG+Utwg=='
                 )
-
-    container_client = blob_service_client.get_container_client(container_name)
-    blob_client = container_client.get_blob_client(file_name)
-
-    input_index = blob_client.blob_name
-    index = GPTSimpleVectorIndex.load_from_disk(input_index)
+    
+    blob_client = blob_service_client.get_blob_client(container=container_name, blob="index.json")
+    with open(file=os.path.join('embedd.json'), mode="wb") as sample_blob:
+        download_stream = blob_client.download_blob()
+        sample_blob.write(download_stream.readall())
+    index = GPTSimpleVectorIndex.load_from_disk('embedd.json')
     response = index.query(text_query, response_mode="compact")
     return response.replace('\n', '')
 
