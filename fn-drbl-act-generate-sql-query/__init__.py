@@ -145,7 +145,7 @@ def generate_openai_prompt(text_query):
     input_index = blob_client.blob_name
     index = GPTSimpleVectorIndex.load_from_disk(input_index)
     response = index.query(text_query, response_mode="compact")
-    return response
+    return response.replace('\n', '')
 
 # def prompt_openai(prompt):
 #     logging.info(prompt)
